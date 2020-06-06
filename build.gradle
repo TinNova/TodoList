@@ -36,6 +36,7 @@ ext {
     androidxLifecycleVersion = "2.2.0"
     coroutinesCoreVersion = "1.3.2"
     kotlinVersion = "1.3.70"
+    kotlin_mockK = '1.9'
 }
 
 task clean(type: Delete) {

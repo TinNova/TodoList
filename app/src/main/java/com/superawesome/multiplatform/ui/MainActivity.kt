@@ -60,9 +60,3 @@ class MainActivity : AppCompatActivity(), TodoClickListener {
         viewModel.deleteTodo(todoIndex)
     }
 }
-
-// Unit Test
-// We are unit testing the common code
-
-// UI Test
-// Use espresso and barista

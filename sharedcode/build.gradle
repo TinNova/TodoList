@@ -28,6 +28,13 @@ kotlin {
             // KODEIN
             implementation "org.kodein.di:kodein-di-core:$kodeinVersion"
             implementation "org.kodein.di:kodein-di-erased:$kodeinVersion"
+
+            implementation "org.jetbrains.kotlin:kotlin-test"
+            implementation "org.jetbrains.kotlin:kotlin-test-junit"
+
+            implementation "org.jetbrains.kotlin:kotlin-test-common:$kotlin_version"
+            implementation "org.jetbrains.kotlin:kotlin-test-annotations-common"
+            implementation "io.mockk:mockk-common:$kotlin_mockK"
         }
 
         androidMain.dependencies {
@@ -47,12 +54,6 @@ kotlin {
                 api "org.jetbrains.kotlinx:kotlinx-coroutines-core-native:$coroutinesCoreVersion"
             }
         }
-
-//        commonTest.dependencies {
-//            implementation kotlin('test-common')
-//            implementation kotlin('test-annotations-common')
-//            implementation "io.mockk:mockk:$mockk_version"
-//        }
     }
 }
 
@@ -89,13 +90,8 @@ android {
         }
     }
 
-//    testOptions.unitTests.includeAndroidResources = true
+    testOptions.unitTests.includeAndroidResources = true
 }
-
-//// workaround for https://youtrack.jetbrains.com/issue/KT-27170
-//configurations {
-//    compileClasspath
-//}
 
 /**
  * Pack this Kotlin code into an iOS framework.

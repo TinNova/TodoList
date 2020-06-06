@@ -11,10 +11,6 @@
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         android:id="@+id/bottom_sheet">
 
-<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content">-->
-
         <EditText
                 android:id="@+id/bottom_sheet_todo_edit_text"
                 android:layout_width="match_parent"
