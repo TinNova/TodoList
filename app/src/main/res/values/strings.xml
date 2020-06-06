@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MultiPlatform</string>
+
+    <string name="todo_hint">Type Here</string>
+    <string name="submit_todo">Submit</string>
+    <string name="add_todo">Add Todo</string>
+
+</resources>

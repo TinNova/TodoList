@@ -1,0 +1,92 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.superawesome.multiplatform"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/*'
+    }
+
+    // Configure only for each module that uses Java 8
+    // language features (either in its source code or
+    // through dependencies).
+//    compileOptions {
+//        sourceCompatibility JavaVersion.VERSION_1_8
+//        targetCompatibility JavaVersion.VERSION_1_8
+//    }
+//
+//    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+//        kotlinOptions {
+//            jvmTarget = "1.8"
+//        }
+//    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    /**
+     * Android X dependencies
+     */
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation "androidx.core:core-ktx:1.2.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-alpha01"
+
+    /**
+     * Kotlin & Kotlin coroutines dependency
+     */
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+//    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.2"
+//    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.2"
+
+    /**
+     * Dependency on the MultiPlatform shared library
+     * This will be shared between iOS & Android
+     */
+    implementation project(':sharedcode')
+
+    /**
+     * Test dependency on Junit
+     */
+    testImplementation 'junit:junit:4.12'
+
+    /**
+     * Dependency on Junit & Espresso for instrumentation tests
+     */
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+
+    // ARCHITECTURE COMPONENTS
+    implementation "android.arch.lifecycle:extensions:1.1.1"
+    implementation "android.arch.lifecycle:viewmodel:1.1.1"
+
+    implementation("dev.icerock.moko:mvvm:0.6.0")
+
+    // Design BottomSheet
+    implementation "com.android.support:design:28.0.0"
+
+    /**
+     * Dependency on ViewModel & LiveData
+     */
+//    implementation 'androidx.lifecycle:lifecycle-extandroidx.lifecycle:lifecycle-extensionsensions:2.2.0'
+}

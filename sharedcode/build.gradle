@@ -1,0 +1,123 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-multiplatform'
+apply plugin: 'kotlinx-serialization'
+
+kotlin {
+    targets {
+        final def iOSTarget = System.getenv('SDK_NAME')?.startsWith("iphoneos") ? presets.iosArm64 : presets.iosX64
+
+        fromPreset(iOSTarget, 'iOS') {
+            binaries {
+                framework('SharedCode')
+            }
+        }
+
+        fromPreset(presets.android, 'android')
+    }
+
+    sourceSets {
+        commonMain.dependencies {
+            api 'org.jetbrains.kotlin:kotlin-stdlib-common'
+
+            // Coroutines
+            api "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$coroutinesCoreVersion"
+
+            // MOKO - MVVM
+            implementation "dev.icerock.moko:mvvm:$mokoMvvmVersion"
+
+            // KODEIN
+            implementation "org.kodein.di:kodein-di-core:$kodeinVersion"
+            implementation "org.kodein.di:kodein-di-erased:$kodeinVersion"
+        }
+
+        androidMain.dependencies {
+            implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+            implementation "org.jetbrains.kotlin:kotlin-stdlib-common:$kotlin_version"
+
+            // Coroutines
+            implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesCoreVersion"
+
+            // MOKO - MVVM
+            implementation "androidx.lifecycle:lifecycle-extensions:$androidxLifecycleVersion"
+        }
+
+        iOSMain {
+            dependsOn commonMain
+            dependencies {
+                api "org.jetbrains.kotlinx:kotlinx-coroutines-core-native:$coroutinesCoreVersion"
+            }
+        }
+
+//        commonTest.dependencies {
+//            implementation kotlin('test-common')
+//            implementation kotlin('test-annotations-common')
+//            implementation "io.mockk:mockk:$mockk_version"
+//        }
+    }
+}
+
+/**
+ * Setup Android specific info for androidMain sub-library
+ */
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'src/androidMain/AndroidManifest.xml'
+            java.srcDirs = ['src/androidMain/kotlin']
+            res.srcDirs = ['src/androidMain/res']
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
+
+//    testOptions.unitTests.includeAndroidResources = true
+}
+
+//// workaround for https://youtrack.jetbrains.com/issue/KT-27170
+//configurations {
+//    compileClasspath
+//}
+
+/**
+ * Pack this Kotlin code into an iOS framework.
+ * You can find the result in:
+ *  sharedcode/build/xcode-frameworks
+ */
+task packForXCode(type: Sync) {
+    final File frameworkDir = new File(buildDir, "xcode-frameworks")
+    final String mode = project.findProperty("XCODE_CONFIGURATION")?.toUpperCase() ?: 'DEBUG'
+    final def framework = kotlin.targets.iOS.binaries.getFramework("SharedCode", mode)
+
+    inputs.property "mode", mode
+    dependsOn framework.linkTask
+
+    from { framework.outputFile.parentFile }
+    into frameworkDir
+
+    doLast {
+        new File(frameworkDir, 'gradlew').with {
+            text = "#!/bin/bash\nexport 'JAVA_HOME=${System.getProperty("java.home")}'\ncd '${rootProject.rootDir}'\n./gradlew \$@\n"
+            setExecutable(true)
+        }
+    }
+}
+tasks.build.dependsOn packForXCode
