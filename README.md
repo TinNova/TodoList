@@ -7,14 +7,17 @@ After reading a few articles on Kotlin Multiplatform I settled on the interpreta
 
 The reason I choose the above interpretation is because it mimics the MVVM pattern recommended by Google, inface the Moko MVVM library is even lifecycle aware. It also suggests using the Kodein Dependency Injection library which is extremely easy to use and setup.
 
-## Architecture
-* I have a ViewModel, TodoRepo and a Todo data class.
-* The ViewModel is only concerned with retrieving data from the TodoRepo and delivering it to the View.
-* The TodoRepo is the sole class that has access to the Todo list
-* The Todo model only contains a string, it doesn't need to exist, but in the future I can imagine a check box or a date stamp being associated with every Todo entry and by having the model already created it means there's minimal refactoring involved.
-* This setup made unit testing very easy.
-
 ## Folder Structure
 The project has two module:
 * `KotlinMultiplatform` this contains the app folder and share folder, it would also contain the ios folder
 * `commonMain` is the **Kotlin Multiplatform** library that's accessible to both apps
+
+## Code Walk-Through
+* The `commonMain` folder has a ViewModel, TodoRepo and a Todo data class
+  * This means the code can be used by ios and android.
+* In the `app` folder we only have the MainActivity, Adapter and a callback Interface
+  * These classes are specific to the android os
+* The ViewModel is only concerned with retrieving data from the TodoRepo and delivering it to the View.
+* The TodoRepo is the sole class that has access to the Todo list
+* The Todo model only contains a string, it doesn't need to exist, but in the future I can imagine a check box or a date stamp being associated with every Todo entry and by having the model already created it means there's minimal refactoring involved.
+* This setup made unit testing very easy.
