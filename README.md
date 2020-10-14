@@ -5,7 +5,7 @@ This app is an experiment in Kotlin Multiplatform. It is a simple one-page app w
 
 After reading a few articles on Kotlin Multiplatform I settled on the interpretation of it from this article [Link](https://proandroiddev.com/kotlin-multiplatform-mvvm-clean-architecture-f20b99f90b95).
 
-The reason I choose the above interpretation is because it mimics the MVVM pattern reccommended by Google, inface the Moko MVVM library is even lifecycle aware. It also suggests using the Kodein Dependency Injection library which is extremly easy to use and setup.
+The reason I choose the above interpretation is because it mimics the MVVM pattern recommended by Google, inface the Moko MVVM library is even lifecycle aware. It also suggests using the Kodein Dependency Injection library which is extremely easy to use and setup.
 
 ## Architecture
 * I have a ViewModel, TodoRepo and a Todo data class.
